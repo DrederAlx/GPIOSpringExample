@@ -19,6 +19,7 @@ import java.util.Map;
 public class Parser {
     private final ParserConfig config;
     private final Map<String, GpioPinDigitalOutput> ledMap;
+    private int trafficJamScore;
 
     @Autowired
     public Parser(ParserConfig config, @Qualifier("ledMap") Map<String, GpioPinDigitalOutput> ledMap) {
@@ -26,10 +27,12 @@ public class Parser {
         this.ledMap = ledMap;
     }
 
+    public int getTrafficJamScore() {
+        return trafficJamScore;
+    }
+
     @Scheduled(fixedRate = 1800000)
     public void start() {
-
-        int trafficJamScore = 0;
 
         try {
             Document document = Jsoup.connect(config.getLink()).get();
