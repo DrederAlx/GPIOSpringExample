@@ -1,25 +1,23 @@
 package com.example.ledexample.controllers;
 
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.ConfigurableApplicationContext;
+import com.example.ledexample.context.MyAppContext;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-public class ShutdownController implements ApplicationContextAware {
+import lombok.RequiredArgsConstructor;
 
-    private ApplicationContext context;
+
+@RestController
+@RequiredArgsConstructor
+public class ShutdownController {
+
+    private final MyAppContext myAppContext;
+
 
     @PostMapping("/shutdown")
     public void shutdownContext() {
-        ((ConfigurableApplicationContext) context).close();
+        myAppContext.close();
     }
 
-    @Override
-    public void setApplicationContext(ApplicationContext ctx) throws BeansException {
-        this.context = ctx;
-
-    }
 }
