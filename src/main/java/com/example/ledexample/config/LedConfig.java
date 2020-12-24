@@ -25,11 +25,18 @@ public class LedConfig {
     public Map<String, GpioPinDigitalOutput> pinDigitalOutput(){
         Map<String, GpioPinDigitalOutput> ledMap = new HashMap<>();
         for (String pinName : pinNames) {
-            ledMap.put(pinName, GpioFactory.getInstance().provisionDigitalOutputPin(
+
+            GpioPinDigitalOutput pin = GpioFactory.getInstance().provisionDigitalOutputPin(
                     RaspiPin.getPinByName(pinName), // Номер пина по WiringPi
                     pinName, // Имя пина (необязательный)
-                    PinState.LOW) // Состояние пина при запуске (необязательный)
-            );
+                    PinState.LOW); // Состояние пина при запуске (необязательный)
+
+            pin.setShutdownOptions(true, // освобождаем пин
+                    PinState.LOW, // задаём состояние 0
+                    PinPullResistance.OFF, // отключаем подтягивающий резистор
+                    PinMode.DIGITAL_INPUT); // установливаем режим входа
+
+            ledMap.put(pinName, pin);
         }
         return ledMap;
     }
